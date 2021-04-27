@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_music_player/domain/entity/album.dart';
 
 import 'package:get/get.dart';
 
@@ -18,6 +21,7 @@ class HomePage extends GetView<HomeController> {
             itemCount: controller.albums.length,
             itemBuilder: (_, index) => 
               ListTile(
+                leading: Image.memory(controller.albums[index].cover),
                 title: Text('${controller.albums[index].title}'),
               ) 
           );
