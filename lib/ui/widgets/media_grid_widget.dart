@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_music_player/domain/entity/album.dart';
+import 'package:flutter_music_player/ui/resources/colors.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MediaGrid extends StatefulWidget {
   final List<Album> albums;
@@ -43,7 +46,7 @@ class _MediaGridState extends State<MediaGrid> {
                 color: Colors.grey,
                 child: Center(
                   child: Icon(
-                    Icons.album_rounded,
+                    FontAwesomeIcons.recordVinyl,
                     size: 48.0,
                     color: Colors.white,
                   ),
@@ -51,7 +54,7 @@ class _MediaGridState extends State<MediaGrid> {
               ),
             footer: Container(
               padding: const EdgeInsets.all(8.0),
-              color: Colors.black54,
+              color: primaryColor.withOpacity(.5),
               child: Text(
                 '${widget.albums[index].title}',
                 overflow: TextOverflow.fade,

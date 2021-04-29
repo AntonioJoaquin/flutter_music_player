@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_music_player/ui/resources/colors.dart';
 
 import 'package:get/get.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
@@ -22,7 +23,8 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Fluyer Music',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.red,
+        primaryColor: primaryColor
       ),
       initialRoute: '/',
       getPages: [
