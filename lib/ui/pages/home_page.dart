@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_music_player/domain/entity/album.dart';
+import 'package:flutter_music_player/ui/widgets/media_grid_widget.dart';
 
 import 'package:get/get.dart';
 
@@ -15,17 +16,15 @@ class HomePage extends GetView<HomeController> {
     controller.getAlbums();
 
     return Scaffold(
-      body: GetBuilder<HomeController>(
-        builder: (controller) {
-          return ListView.builder(
-            itemCount: controller.albums.length,
-            itemBuilder: (_, index) => 
-              ListTile(
-                leading: Image.memory(controller.albums[index].cover),
-                title: Text('${controller.albums[index].title}'),
-              ) 
-          );
-        } 
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: GetBuilder<HomeController>(
+          builder: (controller) {
+            return controller.isLoading
+              ? Center(child: CircularProgressIndicator())
+              :  MediaGrid(albums: controller.albums,);
+          } 
+        ),
       )
     );
   }
