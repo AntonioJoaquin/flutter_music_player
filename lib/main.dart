@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_music_player/ui/resources/colors.dart';
 
 import 'package:get/get.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 
 import 'package:flutter_music_player/data/repository/file_repository.dart';
 import 'package:flutter_music_player/domain/binding/home_binding.dart';
+import 'package:flutter_music_player/ui/pages/album_page.dart';
+import 'package:flutter_music_player/ui/resources/colors.dart';
+import 'package:flutter_music_player/domain/binding/album_binding.dart';
 import 'package:flutter_music_player/domain/repository/abstract_file_repository.dart';
-
 import 'package:flutter_music_player/ui/pages/home_page.dart';
 
 void main() {
@@ -28,7 +29,8 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       getPages: [
-        GetPage(name: '/', page: () => HomePage(), binding: HomeBinding())
+        GetPage(name: '/', page: () => HomePage(), binding: HomeBinding()),
+        GetPage(name: '/album', page: () => AlbumPage(), binding: AlbumBinding())
       ],
     );
   }

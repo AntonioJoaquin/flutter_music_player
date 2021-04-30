@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_music_player/ui/arguments/album_argument.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:flutter_music_player/domain/entity/album.dart';
 import 'package:flutter_music_player/ui/resources/index.dart';
+import 'package:get/get.dart';
 
 class MediaGrid extends StatefulWidget {
   final List<Album> albums;
@@ -38,18 +40,21 @@ class _MediaGridState extends State<MediaGrid> {
       ),
       itemCount: widget.albums.length,
       itemBuilder: (_, index) => 
-        _buildItem(index) 
+        _buildItem(widget.albums[index]) 
     );
   }
 
-  Widget _buildItem(int index) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(albumItemBorderRadius),
-      child: GridTile(
-        child: widget.albums[index].cover != null
-          ? Image.memory(widget.albums[index].cover)
-          : _buildImagePlaceholder(),
-        footer: _buildFooter(index) // Text('${widget.albums[index].title}'),
+  Widget _buildItem(Album album) {
+    return InkWell(
+      onTap: () => _onItemTapped(album.id),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(albumItemBorderRadius),
+        child: GridTile(
+          child: album.cover != null
+            ? Image.memory(album.cover)
+            : _buildImagePlaceholder(),
+          footer: _buildFooter(album) // Text('${widget.albums[index].title}'),
+        ),
       ),
     );
   }
@@ -67,14 +72,14 @@ class _MediaGridState extends State<MediaGrid> {
     );
   }
 
-  Widget _buildFooter(int index) {
+  Widget _buildFooter(Album album) {
     return Visibility(
-      visible: widget.albums[index].cover == null,
+      visible: album.cover == null,
       child: Container(
         padding: const EdgeInsets.all(commonPadding),
         color: primaryColor.withOpacity(.5),
         child: Text(
-          '${widget.albums[index].title}',
+          '${album.title}',
           overflow: TextOverflow.fade,
           softWrap: false,
           maxLines: 1,
@@ -85,5 +90,10 @@ class _MediaGridState extends State<MediaGrid> {
         ),
       ),
     );
+  }
+
+  // Functions
+  void _onItemTapped(String id) {
+    Get.toNamed('/album', arguments: AlbumArguments(albumId: id));
   }
 }
