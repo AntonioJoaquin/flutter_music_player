@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_music_player/ui/resources/colors.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 import 'package:flutter_music_player/ui/widgets/media_grid_widget.dart';
 import 'package:flutter_music_player/domain/controller/home_controller.dart';
+import 'package:flutter_music_player/ui/resources/index.dart';
 
 class HomePage extends GetView<HomeController> {
   const HomePage({Key key}) : super(key: key);
@@ -17,54 +17,76 @@ class HomePage extends GetView<HomeController> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(commonPadding),
           child: Stack(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(FontAwesomeIcons.music, color: primaryColor,),
-                        SizedBox(width: 8.0,),
-                        Text(
-                          'Fluyer Music',
-                          style: TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                            color: primaryColor
-                          ),
-                        )
-                      ],
-                    ),
-                    Icon(FontAwesomeIcons.search, color: primaryColor,)
-                  ],
-                ),
-              ),
-              GetBuilder<HomeController>(
-                builder: (controller) {
-                  return controller.isLoading
-                    ? Center(child: CircularProgressIndicator())
-                    :  Padding(
-                      padding: const EdgeInsets.only(top: kToolbarHeight * 2),
-                      child: MediaGrid(albums: controller.albums,),
-                    );
-                } 
-              ),
+              _buildAppBar(),
+
+              _buildBody(),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          height: kBottomNavigationBarHeight * 1.25,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16.0),
-            color: primaryColor,
-          ),
+      bottomNavigationBar: _buildBottomNavigationBar(),
+    );
+  }
+
+  Widget _buildAppBar() {
+    return Padding(
+      padding: const EdgeInsets.all(commonPadding),
+      child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(
+                  FontAwesomeIcons.headphones, 
+                  size: mainIconSize,
+                  color: primaryColor,
+                ),
+
+                SizedBox(width: iconTextWidth,),
+
+                Text(
+                  'Fluyer Music',
+                  style: TextStyle(
+                    fontSize: appTitleFontSize,
+                    fontWeight: FontWeight.bold,
+                    color: primaryColor
+                  ),
+                )
+              ],
+            ),
+
+            Icon(FontAwesomeIcons.search, color: primaryColor,)
+          ],
+        ),
+    );
+  }
+
+  Widget _buildBody() {
+    return GetBuilder<HomeController>(
+      builder: (controller) {
+        return controller.isLoading
+          ? Center(child: CircularProgressIndicator())
+          : Padding(
+            padding: const EdgeInsets.only(top: kToolbarHeight * 2),
+            child: MediaGrid(albums: controller.albums,),
+          );
+      } 
+    );
+  }
+
+  Widget _buildBottomNavigationBar() {
+    return Padding(
+      padding: const EdgeInsets.all(commonPadding),
+      child: Container(
+        height: bottomNavigationBarHeight,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(bottomNavigationBarBorderRadius),
+          color: primaryColor,
         ),
       ),
     );
