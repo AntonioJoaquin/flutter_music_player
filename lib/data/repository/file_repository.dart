@@ -22,7 +22,7 @@ class FileRepositoryImpl implements FileRepository {
 
     for (int i = 0; i < albumsInfo.length; i++) {
       albums.add(Album(
-        id: albumsInfo[i].id,
+        id: albumsInfo[i].id, 
         title: albumsInfo[i].title,
         cover: covers[i],
         artist: albumsInfo[i].artist,
@@ -35,7 +35,11 @@ class FileRepositoryImpl implements FileRepository {
 
   @override
   Future<List<Song>> getAlbumSongs(String id) async {
-    List<SongInfo> songs =  await flutterAudioQuery.getSongsFromAlbum(albumId: id);
+    List<SongInfo> songs =  await flutterAudioQuery.getSongsFromAlbum(
+      albumId: id, 
+      sortType: SongSortType.SMALLER_TRACK_NUMBER
+    );
+
     return songs.map((song) => Song(
       title: song.displayName,
       albumCover: song.albumArtwork

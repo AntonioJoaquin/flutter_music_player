@@ -46,12 +46,15 @@ class _MediaGridState extends State<MediaGrid> {
 
   Widget _buildItem(Album album) {
     return InkWell(
-      onTap: () => _onItemTapped(album.id),
+      onTap: () => _onItemTapped(album),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(albumItemBorderRadius),
         child: GridTile(
           child: album.cover != null
-            ? Image.memory(album.cover)
+            ? Hero(
+                tag: album.id,
+                child: Image.memory(album.cover)
+              )
             : _buildImagePlaceholder(),
           footer: _buildFooter(album) // Text('${widget.albums[index].title}'),
         ),
@@ -93,7 +96,10 @@ class _MediaGridState extends State<MediaGrid> {
   }
 
   // Functions
-  void _onItemTapped(String id) {
-    Get.toNamed('/album', arguments: AlbumArguments(albumId: id));
+  void _onItemTapped(Album album) {
+    Get.toNamed('/album', arguments: AlbumArguments(
+      albumId: album.id,
+      albumCover: album.cover
+    ));
   }
 }

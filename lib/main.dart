@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.red,
         primaryColor: primaryColor
       ),
-      initialRoute: '/',
+      initialRoute: '/album',
       getPages: [
         GetPage(name: '/', page: () => HomePage(), binding: HomeBinding()),
         GetPage(name: '/album', page: () => AlbumPage(), binding: AlbumBinding())
