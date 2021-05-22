@@ -41,7 +41,9 @@ class AlbumPage extends GetView<AlbumController> {
                       ),
                     ),
                     SizedBox(width: 24.0,),
-                    Text(title)
+                    Flexible(
+                      child: Text(title),
+                    )
                   ],
                 ),
               ),

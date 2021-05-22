@@ -99,6 +99,7 @@ class _MediaGridState extends State<MediaGrid> {
   void _onItemTapped(Album album) {
     Get.toNamed('/album', arguments: AlbumArguments(
       albumId: album.id,
+      albumTitle: album.title,
       albumCover: album.cover
     ));
   }

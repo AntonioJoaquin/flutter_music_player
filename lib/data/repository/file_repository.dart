@@ -35,14 +35,13 @@ class FileRepositoryImpl implements FileRepository {
 
   @override
   Future<List<Song>> getAlbumSongs(String id) async {
-    List<SongInfo> songs =  await flutterAudioQuery.getSongsFromAlbum(
+    List<SongInfo> songInfos = await flutterAudioQuery.getSongsFromAlbum(
       albumId: id, 
       sortType: SongSortType.SMALLER_TRACK_NUMBER
     );
 
-    return songs.map((song) => Song(
-      title: song.displayName,
-      albumCover: song.albumArtwork
+    return songInfos.map((song) => Song(
+      title: song.title,
     )).toList();
   }
 }

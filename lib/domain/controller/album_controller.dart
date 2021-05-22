@@ -10,7 +10,7 @@ class AlbumController extends GetxController {
 
   void getAlbumsSongs(String id) async {
     isLoading = true;
-    songs = []; // await Get.find<FileRepository>().getAlbumSongs(id);
+    songs = await Get.find<FileRepository>().getAlbumSongs(id);
 
     isLoading = false;
 

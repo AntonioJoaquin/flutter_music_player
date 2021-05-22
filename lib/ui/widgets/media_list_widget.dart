@@ -25,7 +25,9 @@ class _MediaListState extends State<MediaList> {
           itemCount: widget.songs.length,
           itemBuilder: (_, index) {
             return ListTile(
-              title: Text(widget.songs[index].title),
+              title: Text(
+                widget.songs[index].title,
+              ),
             );
           }
         );
