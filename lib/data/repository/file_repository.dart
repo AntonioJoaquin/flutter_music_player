@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:flutter_music_player/domain/entity/album.dart';
+import 'package:flutter_music_player/domain/entity/song.dart';
 import 'package:flutter_music_player/domain/repository/abstract_file_repository.dart';
 
 class FileRepositoryImpl implements FileRepository {
@@ -16,12 +17,12 @@ class FileRepositoryImpl implements FileRepository {
     List<Album> albums = [];
 
     for (AlbumInfo album in albumsInfo) {
-      covers.add(await FlutterAudioQuery().getArtwork(type: ResourceType.ALBUM, id: album.id));
+      covers.add(await flutterAudioQuery.getArtwork(type: ResourceType.ALBUM, id: album.id));
     }
 
     for (int i = 0; i < albumsInfo.length; i++) {
       albums.add(Album(
-        id: albumsInfo[i].id,
+        id: albumsInfo[i].id, 
         title: albumsInfo[i].title,
         cover: covers[i],
         artist: albumsInfo[i].artist,
@@ -30,5 +31,17 @@ class FileRepositoryImpl implements FileRepository {
     }
 
     return albums;
+  }
+
+  @override
+  Future<List<Song>> getAlbumSongs(String id) async {
+    List<SongInfo> songInfos = await flutterAudioQuery.getSongsFromAlbum(
+      albumId: id, 
+      sortType: SongSortType.SMALLER_TRACK_NUMBER
+    );
+
+    return songInfos.map((song) => Song(
+      title: song.title,
+    )).toList();
   }
 }
