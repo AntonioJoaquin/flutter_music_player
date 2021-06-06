@@ -36,7 +36,25 @@ class AlbumPage extends GetView<AlbumController> {
                         height: 100.0,
                         child: Hero(
                           tag: id,
-                          child: Image.memory(albumCover)
+                          child: albumCover.isNotEmpty
+                            ? Image.memory(albumCover)
+                            : Container(
+                                color: Colors.red,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Flexible(
+                                          child: Text(
+                                            title,
+                                            style: TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                              )
                         ),
                       ),
                     ),

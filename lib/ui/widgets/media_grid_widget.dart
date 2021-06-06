@@ -53,7 +53,25 @@ class _MediaGridState extends State<MediaGrid> {
           child: album.cover != null
             ? Hero(
                 tag: album.id,
-                child: Image.memory(album.cover)
+                child: album.cover.isNotEmpty
+                  ? Image.memory(album.cover)
+                  : Container(
+                      color: Colors.red,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Flexible(
+                                child: Text(
+                                  album.title,
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                    )
               )
             : _buildImagePlaceholder(),
           footer: _buildFooter(album) // Text('${widget.albums[index].title}'),
