@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:device_info/device_info.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:flutter_music_player/domain/entity/album.dart';
 import 'package:flutter_music_player/domain/entity/song.dart';
@@ -16,15 +18,22 @@ class FileRepositoryImpl implements FileRepository {
     List<Uint8List> covers = [];
     List<Album> albums = [];
 
-    for (AlbumInfo album in albumsInfo) {
-      covers.add(await flutterAudioQuery.getArtwork(type: ResourceType.ALBUM, id: album.id));
+    if (Platform.isAndroid) {
+      var androidInfo = await DeviceInfoPlugin().androidInfo;
+
+      if (androidInfo.version.sdkInt >= 29) {
+        for (AlbumInfo album in albumsInfo) {
+          covers.add(await flutterAudioQuery.getArtwork(type: ResourceType.ALBUM, id: album.id));
+        }
+      }
     }
 
     for (int i = 0; i < albumsInfo.length; i++) {
       albums.add(Album(
         id: albumsInfo[i].id, 
         title: albumsInfo[i].title,
-        cover: covers[i],
+        cover: covers.isEmpty ? null : covers[i],
+        albumArt: covers.isEmpty ? albumsInfo[i].albumArt : null,
         artist: albumsInfo[i].artist,
         numberOfSongs: albumsInfo[i].numberOfSongs
       ));
