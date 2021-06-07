@@ -17,17 +17,18 @@ class HomePage extends GetView<HomeController> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(commonPadding),
+          padding: const EdgeInsets.symmetric(horizontal: commonPadding),
           child: Stack(
             children: [
               _buildAppBar(),
 
               _buildBody(),
+
+              _buildBottomNavigationBar(),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNavigationBar(),
     );
   }
 
@@ -80,13 +81,16 @@ class HomePage extends GetView<HomeController> {
   }
 
   Widget _buildBottomNavigationBar() {
-    return Padding(
-      padding: const EdgeInsets.all(commonPadding),
-      child: Container(
-        height: bottomNavigationBarHeight,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(bottomNavigationBarBorderRadius),
-          color: primaryColor,
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Padding(
+        padding: const EdgeInsets.all(commonPadding),
+        child: Container(
+          height: bottomNavigationBarHeight,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(bottomNavigationBarBorderRadius),
+            color: primaryColor,
+          ),
         ),
       ),
     );
