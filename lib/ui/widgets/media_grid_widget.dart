@@ -90,7 +90,8 @@ class _MediaGridState extends State<MediaGrid> {
     Get.toNamed('/album', arguments: AlbumArguments(
       albumId: album.id,
       albumTitle: album.title,
-      albumCover: album.cover
+      albumCover: album.cover,
+      albumArt: album.albumArt
     ));
   }
 }
