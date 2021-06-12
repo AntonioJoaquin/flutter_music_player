@@ -40,35 +40,45 @@ class AlbumPage extends GetView<AlbumController> {
   }
 
    Widget _buildBody() {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                _buildCover(),
-                SizedBox(width: 24.0,),
-                Flexible(
-                  child: Text(title),
-                )
-              ],
+    return Column(
+      children: [
+        _buildHeader(),
+        Expanded(
+          child: SingleChildScrollView(
+            child: GetBuilder<AlbumController>(
+              builder: (controller) {
+                return controller.isLoading
+                  ? Center(child: CircularProgressIndicator(),)
+                  : Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: MediaList(songs: controller.songs,),
+                  );
+              },
             ),
           ),
-          GetBuilder<AlbumController>(
-            builder: (controller) {
-              return controller.isLoading
-                ? Center(child: CircularProgressIndicator(),)
-                : Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: MediaList(songs: controller.songs,),
-                );
-            },
-          ),
+        ),
+      ],
+    );
+   }
+
+  Widget _buildHeader() {
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+        color: Colors.white.withOpacity(.5)
+      ),
+      child: Row(
+        children: [
+          _buildCover(),
+          SizedBox(width: 24.0,),
+          Flexible(
+            child: Text(title),
+          )
         ],
       ),
     );
-   }
+  }
 
   Widget _buildCover() {
     return ClipRRect(
@@ -78,13 +88,16 @@ class AlbumPage extends GetView<AlbumController> {
         height: 100.0,
         child: Hero(
           tag: id,
-          child: (albumCover != null)
-            ? albumCover.isNotEmpty
-              ? Image.memory(albumCover)
-              : _buildCoverPlaceholder(title)
-            : (albumArt != null)
-              ? Image.file(File(albumArt))
-              : _buildCoverPlaceholder(title)
+          child: Material(
+            type: MaterialType.transparency,
+            child: (albumCover != null)
+              ? albumCover.isNotEmpty
+                ? Image.memory(albumCover)
+                : _buildCoverPlaceholder(title)
+              : (albumArt != null)
+                ? Image.file(File(albumArt))
+                : _buildCoverPlaceholder(title),
+          )
         ),
       ),
     );

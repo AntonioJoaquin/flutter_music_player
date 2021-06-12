@@ -52,13 +52,16 @@ class _MediaGridState extends State<MediaGrid> {
         child: GridTile(
           child: Hero(
             tag: album.id,
-            child: (album.cover != null)
-              ? album.cover.isNotEmpty
-                ? Image.memory(album.cover)
-                : _buildCoverPlaceholder(album.title)
-              : (album.albumArt != null)
-                ? Image.file(File(album.albumArt))
-                : _buildCoverPlaceholder(album.title)
+            child: Material(
+              type: MaterialType.transparency,
+              child: (album.cover != null)
+                ? album.cover.isNotEmpty
+                  ? Image.memory(album.cover)
+                  : _buildCoverPlaceholder(album.title)
+                : (album.albumArt != null)
+                  ? Image.file(File(album.albumArt))
+                  : _buildCoverPlaceholder(album.title),
+            )
           ),
         ),
       ),
