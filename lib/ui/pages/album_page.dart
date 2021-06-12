@@ -1,9 +1,11 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_music_player/ui/arguments/album_argument.dart';
 import 'package:flutter_music_player/ui/resources/index.dart';
+import 'package:flutter_music_player/ui/widgets/blur_cover_widget.dart';
 
 import 'package:get/get.dart';
 
@@ -24,47 +26,66 @@ class AlbumPage extends GetView<AlbumController> {
     
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(albumItemBorderRadius),
-                      child: Container(
-                        width: 100.0,
-                        height: 100.0,
-                        child: Hero(
-                          tag: id,
-                          child: (albumCover != null)
-                            ? albumCover.isNotEmpty
-                              ? Image.memory(albumCover)
-                              : _buildCoverPlaceholder(title)
-                            : (albumArt != null)
-                              ? Image.file(File(albumArt))
-                              : _buildCoverPlaceholder(title)
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 24.0,),
-                    Flexible(
-                      child: Text(title),
-                    )
-                  ],
-                ),
-              ),
-              GetBuilder<AlbumController>(
-                builder: (controller) {
-                  return controller.isLoading
-                    ? Center(child: CircularProgressIndicator(),)
-                    : MediaList(songs: controller.songs,);
-                },
-              ),
-            ],
-          ),
+        child: Stack(
+          children: [
+            BlurCover(
+              albumCover: albumCover,
+              albumArt: albumArt,
+            ),
+            _buildBody(),
+          ],
         )
+      ),
+    );
+  }
+
+   Widget _buildBody() {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                _buildCover(),
+                SizedBox(width: 24.0,),
+                Flexible(
+                  child: Text(title),
+                )
+              ],
+            ),
+          ),
+          GetBuilder<AlbumController>(
+            builder: (controller) {
+              return controller.isLoading
+                ? Center(child: CircularProgressIndicator(),)
+                : Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: MediaList(songs: controller.songs,),
+                );
+            },
+          ),
+        ],
+      ),
+    );
+   }
+
+  Widget _buildCover() {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(albumItemBorderRadius),
+      child: Container(
+        width: 100.0,
+        height: 100.0,
+        child: Hero(
+          tag: id,
+          child: (albumCover != null)
+            ? albumCover.isNotEmpty
+              ? Image.memory(albumCover)
+              : _buildCoverPlaceholder(title)
+            : (albumArt != null)
+              ? Image.file(File(albumArt))
+              : _buildCoverPlaceholder(title)
+        ),
       ),
     );
   }
