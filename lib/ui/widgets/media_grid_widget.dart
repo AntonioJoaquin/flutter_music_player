@@ -1,7 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_music_player/ui/arguments/album_argument.dart';
-
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:flutter_music_player/domain/entity/album.dart';
 import 'package:flutter_music_player/ui/resources/index.dart';
@@ -50,64 +50,36 @@ class _MediaGridState extends State<MediaGrid> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(albumItemBorderRadius),
         child: GridTile(
-          child: album.cover != null
-            ? Hero(
-                tag: album.id,
-                child: album.cover.isNotEmpty
-                  ? Image.memory(album.cover)
-                  : Container(
-                      color: Colors.red,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Flexible(
-                                child: Text(
-                                  album.title,
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                    )
-              )
-            : _buildImagePlaceholder(),
-          footer: _buildFooter(album) // Text('${widget.albums[index].title}'),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildImagePlaceholder() {
-    return Container(
-      color: Colors.grey,
-      child: Center(
-        child: Icon(
-          FontAwesomeIcons.recordVinyl,
-          size: albumItemPlaceholderIconSize,
-          color: Colors.white,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildFooter(Album album) {
-    return Visibility(
-      visible: album.cover == null,
-      child: Container(
-        padding: const EdgeInsets.all(commonPadding),
-        color: primaryColor.withOpacity(.5),
-        child: Text(
-          '${album.title}',
-          overflow: TextOverflow.fade,
-          softWrap: false,
-          maxLines: 1,
-          style: TextStyle(
-            fontSize: albumItemFontSize,
-            color: Colors.white
+          child: Hero(
+            tag: album.id,
+            child: (album.cover != null)
+              ? album.cover.isNotEmpty
+                ? Image.memory(album.cover)
+                : _buildCoverPlaceholder(album.title)
+              : (album.albumArt != null)
+                ? Image.file(File(album.albumArt))
+                : _buildCoverPlaceholder(album.title)
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCoverPlaceholder(String title) {
+    return Container(
+      color: Colors.red,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Flexible(
+              child: Text(
+                title,
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -118,7 +90,8 @@ class _MediaGridState extends State<MediaGrid> {
     Get.toNamed('/album', arguments: AlbumArguments(
       albumId: album.id,
       albumTitle: album.title,
-      albumCover: album.cover
+      albumCover: album.cover,
+      albumArt: album.albumArt
     ));
   }
 }

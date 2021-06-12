@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ class AlbumPage extends GetView<AlbumController> {
   final String id = (Get.arguments as AlbumArguments).albumId;
   final String title = (Get.arguments as AlbumArguments).albumTitle;
   final Uint8List albumCover = (Get.arguments as AlbumArguments).albumCover;
+  final String albumArt = (Get.arguments as AlbumArguments).albumArt;
 
   AlbumPage({Key key}) : super(key: key);
 
@@ -36,25 +38,13 @@ class AlbumPage extends GetView<AlbumController> {
                         height: 100.0,
                         child: Hero(
                           tag: id,
-                          child: albumCover.isNotEmpty
-                            ? Image.memory(albumCover)
-                            : Container(
-                                color: Colors.red,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Flexible(
-                                          child: Text(
-                                            title,
-                                            style: TextStyle(color: Colors.white),
-                                          ),
-                                        ),
-                                    ],
-                                  ),
-                                ),
-                              )
+                          child: (albumCover != null)
+                            ? albumCover.isNotEmpty
+                              ? Image.memory(albumCover)
+                              : _buildCoverPlaceholder(title)
+                            : (albumArt != null)
+                              ? Image.file(File(albumArt))
+                              : _buildCoverPlaceholder(title)
                         ),
                       ),
                     ),
@@ -75,6 +65,26 @@ class AlbumPage extends GetView<AlbumController> {
             ],
           ),
         )
+      ),
+    );
+  }
+
+  Widget _buildCoverPlaceholder(String title) {
+    return Container(
+      color: Colors.red,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Flexible(
+              child: Text(
+                title,
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
